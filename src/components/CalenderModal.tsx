@@ -3,15 +3,23 @@ import {
 	endOfMonth,
 	endOfWeek,
 	format,
+	isSameDay,
 	isSameMonth,
 	startOfMonth,
 	startOfWeek,
 } from "date-fns";
-
-type CalenderModalProps = {
-	date: Date;
+type CalendarState = {
+	selectedDate: Date;
+	showModal: boolean;
 };
-function CalenderModal({ date }: CalenderModalProps) {
+
+type CalendarModalProps = {
+	date: Date;
+	setState: React.Dispatch<React.SetStateAction<CalendarState>>;
+	State: CalendarState;
+};
+function CalenderModal({ date, setState}: CalendarModalProps) {
+    const currentDate = new Date()
 	const intervalDates = eachDayOfInterval({
 		start: startOfWeek(startOfMonth(date)),
 		end: endOfWeek(endOfMonth(date)),
@@ -21,11 +29,20 @@ function CalenderModal({ date }: CalenderModalProps) {
 			{intervalDates.map((d, index) => (
 				<div
 					key={index}
-					className={`flex items-center justify-center ${
-						isSameMonth(d, date) ? "text-black" : "text-gray-400"
-					}`}
+					className={`flex items-center justify-center p-2
+                    ${
+											isSameDay(d, date)
+												? "bg-indigo-600 text-white rounded-lg"
+												: ""
+										}
+                    ${ isSameDay(currentDate, d) ? "border-2 rounded-lg border-indigo-900" : "" }
+					 ${isSameMonth(d, date) ? "text-black" : "text-gray-400"}`}
 				>
-					{format(d, "dd")}
+					<button
+						onClick={() => setState((state) => ({ ...state, selectedDate: d }))}
+					>
+						{format(d, "dd")}
+					</button>
 				</div>
 			))}
 		</>

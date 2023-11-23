@@ -18,8 +18,9 @@ function App() {
 		selectedDate: new Date(),
 		showModal: false,
 	};
-	const [{ selectedDate, showModal }, setState] = useState(state);
+	const [State, setState] = useState(state);
 
+	const { selectedDate, showModal } = State;
 	return (
 		<div className="min-h-screen bg-gray-300 flex items-center justify-center flex-col">
 			<div className="flex gap-x-2 mb-5">
@@ -58,16 +59,20 @@ function App() {
 				</button>
 			</div>
 			{showModal && (
-				<div className="bg-white border-2 border-black p-2 grid grid-cols-7 text-xl gap-2">
+				<div className="bg-white rounded-lg shadow-xl p-2 grid grid-cols-7 text-xl gap-2">
 					{days.map(({ name }, index) => (
 						<div
 							key={index}
-							className="border-black font-bold font-2xl border-b-2"
+							className="flex shadow-xl font-mono items-center justify-center p-2 border-black font-bold font-2xl border-b-2"
 						>
 							{name}
 						</div>
 					))}
-					<CalenderModal date={selectedDate} />
+					<CalenderModal
+						date={selectedDate}
+						State={State}
+						setState={setState}
+					/>
 				</div>
 			)}
 		</div>
